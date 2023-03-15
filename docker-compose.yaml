@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  mariadb:
+    image: mariadb:10.6.4-focal
+    command: '--default-authentication-plugin=mysql_native_password'
+    volumes:
+      - m321_project_mariadb:/var/lib/mysql
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=supersecret123
+      - MYSQL_DATABASE=mychat
+      - MYSQL_USER=mychat
+      - MYSQL_PASSWORD=mychatpassword
+    ports:
+      - 3306:3306
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    depends_on:
+      - mariadb
+    restart: always
+    environment:
+      - PMA_HOST=mariadb
+      - PMA_PORT=3306
+      - MYSQL_ROOT_PASSWORD=supersecret123
+    ports:
+      - 9200:80
+
+volumes:
+  m321_project_mariadb:
