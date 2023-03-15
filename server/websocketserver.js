@@ -9,11 +9,11 @@ const initializeWebsocketServer = (server) => {
 // If a new connection is established, the onConnection function is called
 const onConnection = (ws) => {
   console.log("New websocket connection");
-  ws.on("message", onMessage);
+  ws.on("message", (message) => onMessage(ws, message));
 };
 
 // If a new message is received, the onMessage function is called
-const onMessage = (message) => {
+const onMessage = (ws, message) => {
   console.log("Message received: " + message);
   ws.send("Hello, you sent -> " + message);
 };
