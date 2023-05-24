@@ -22,7 +22,6 @@ const initializeWebsocketServer = async (server) => {
   const websocketServer = new WebSocket.Server({ server });
   websocketServer.on("connection", onConnection);
   websocketServer.on("error", console.error);
-  websocketServer.on("close", onClose);
   await subscriber.subscribe("newMessage", onRedisMessage);
   await publisher.publish("newMessage", "Hello from Redis!");
 };
@@ -30,7 +29,9 @@ const initializeWebsocketServer = async (server) => {
 // If a new connection is established, the onConnection function is called
 const onConnection = (ws) => {
   console.log("New websocket connection");
+  ws.on("close", () => onClose(ws));
   ws.on("message", (message) => onClientMessage(ws, message));
+  ws.send("Hello Client!");
   //TODO!!!!!! Add the client to the clients array
 };
 
